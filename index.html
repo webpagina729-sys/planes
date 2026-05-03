@@ -83,13 +83,13 @@
     position: relative;
     z-index: 1;
     text-align: center;
-    padding: 22px 24px 30px;
-    max-width: 680px;
+    padding: 20px 32px 28px;
+    max-width: 600px;
     margin: 0 auto;
   }
   .sub-text p {
-    font-size: clamp(.95rem, 2.2vw, 1.1rem);
-    line-height: 1.6;
+    font-size: clamp(.82rem, 2.8vw, 1.05rem);
+    line-height: 1.55;
     text-shadow: 0 1px 8px rgba(0,0,0,.8);
     font-weight: 500;
   }
@@ -115,8 +115,8 @@
   .plan-card {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 14px;
+    align-items: stretch;
+    gap: 12px;
   }
   .plan-card img {
     width: 100%;
@@ -125,30 +125,31 @@
     cursor: pointer;
     transition: transform .25s ease, box-shadow .25s ease;
     box-shadow: 0 6px 30px rgba(0,0,0,.5);
+    display: block;
   }
   .plan-card img:hover {
     transform: translateY(-4px) scale(1.02);
     box-shadow: 0 14px 40px rgba(0,0,0,.7);
   }
   .btn-plan {
+    width: 100%;
     background: #fff;
     color: #111;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: .92rem;
+    font-size: .88rem;
     font-weight: 700;
     letter-spacing: .04em;
     border: none;
-    border-radius: 50px;
-    padding: 12px 28px;
+    border-radius: 8px;
+    padding: 13px 12px;
     cursor: pointer;
     transition: background .2s, color .2s, transform .15s;
     box-shadow: 0 4px 16px rgba(0,0,0,.35);
-    white-space: nowrap;
   }
   .btn-plan:hover {
     background: #111;
     color: #fff;
-    transform: scale(1.04);
+    transform: translateY(-2px);
   }
 
   /* ── TEXTO BAJO PLANES ── */
@@ -172,28 +173,51 @@
     position: relative;
     z-index: 1;
     background: #000;
-    text-align: center;
-    padding: 40px 24px 36px;
+    padding: 28px 40px;
   }
-  footer img {
-    max-width: 160px;
-    width: auto;
-    height: auto;
-    display: block;
-    margin: 0 auto 18px;
+  .footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
   }
-  footer p {
-    font-size: .95rem;
-    color: #ccc;
-    line-height: 1.7;
-    margin-top: 4px;
-  }
-  footer .contacto-label {
-    font-weight: 700;
+  .btn-contacto {
+    background: transparent;
     color: #fff;
-    font-size: 1rem;
-    letter-spacing: .04em;
-    margin-bottom: 4px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: .85rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    border: 1px solid rgba(255,255,255,.35);
+    border-radius: 6px;
+    padding: 9px 22px;
+    cursor: pointer;
+    transition: border-color .2s, background .2s, color .2s;
+    white-space: nowrap;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-contacto:hover {
+    background: rgba(255,255,255,.1);
+    border-color: rgba(255,255,255,.7);
+  }
+  footer img.footer-logo {
+    max-height: 48px;
+    width: auto;
+    display: block;
+    flex-shrink: 0;
+  }
+  footer .footer-tagline {
+    font-size: clamp(.75rem, 1.8vw, .9rem);
+    color: #aaa;
+    line-height: 1.4;
+    text-align: center;
+    max-width: 320px;
+  }
+  @media (max-width: 560px) {
+    .footer-inner { gap: 20px; }
+    footer .footer-tagline { max-width: 260px; font-size: .78rem; }
   }
 
   /* ══════════════════════════════
@@ -371,19 +395,19 @@
 
     <!-- Plan Básico -->
     <div class="plan-card">
-      <img src="infouno.png" alt="Plan Básico" onclick="openModal('basico')" title="Ver Plan Básico">
+      <img src="infobasico.png" alt="Plan Básico" onclick="openModal('basico')" title="Ver Plan Básico">
       <button class="btn-plan" onclick="openModal('basico')">Ver info de Plan Básico</button>
     </div>
 
     <!-- Plan Estándar -->
     <div class="plan-card">
-      <img src="infodos.png" alt="Plan Estándar" onclick="openModal('estandar')" title="Ver Plan Estándar">
+      <img src="infoestandar.png" alt="Plan Estándar" onclick="openModal('estandar')" title="Ver Plan Estándar">
       <button class="btn-plan" onclick="openModal('estandar')">Ver info de Plan Estándar</button>
     </div>
 
     <!-- Plan Pro -->
     <div class="plan-card">
-      <img src="infotres.png" alt="Plan Pro" onclick="openModal('pro')" title="Ver Plan Pro">
+      <img src="infopro.png" alt="Plan Pro" onclick="openModal('pro')" title="Ver Plan Pro">
       <button class="btn-plan" onclick="openModal('pro')">Ver info de Plan Pro</button>
     </div>
 
@@ -405,9 +429,11 @@
 
 <!-- ── FOOTER ── -->
 <footer>
-  <img src="logoweb.png" alt="Logo">
-  <p class="contacto-label">Contacto:</p>
-  <p>Desaste de esas tareas importantes que se pueden solucionar</p>
+  <div class="footer-inner">
+    <a class="btn-contacto" href="https://wa.me/5492395407700" target="_blank" rel="noopener">Contacto</a>
+    <img class="footer-logo" src="logoweb.png" alt="Logo">
+    <p class="footer-tagline">Desaste de esas tareas importantes que se pueden solucionar</p>
+  </div>
 </footer>
 
 
@@ -420,7 +446,7 @@
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal('basico')" aria-label="Cerrar">&#10005;</button>
     <div class="modal-img-wrap">
-      <img src="infouno.png" alt="Plan Básico" onclick="toggleEnlarge(this)">
+      <img src="infobasico.png" alt="Plan Básico" onclick="toggleEnlarge(this)">
     </div>
     <button class="modal-ver-info" onclick="toggleInfo('basico')">Ver información</button>
     <div class="modal-content-text" id="info-basico">
@@ -466,7 +492,7 @@ y empezás a enfocarte en lo que realmente mueve tu negocio.
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal('estandar')" aria-label="Cerrar">&#10005;</button>
     <div class="modal-img-wrap">
-      <img src="infodos.png" alt="Plan Estándar" onclick="toggleEnlarge(this)">
+      <img src="infoestandar.png" alt="Plan Estándar" onclick="toggleEnlarge(this)">
     </div>
     <button class="modal-ver-info" onclick="toggleInfo('estandar')">Ver información</button>
     <div class="modal-content-text" id="info-estandar">
@@ -522,7 +548,7 @@ Y tu negocio sigue funcionando incluso cuando vos no estás.
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal('pro')" aria-label="Cerrar">&#10005;</button>
     <div class="modal-img-wrap">
-      <img src="infotres.png" alt="Plan Pro" onclick="toggleEnlarge(this)">
+      <img src="infopro.png" alt="Plan Pro" onclick="toggleEnlarge(this)">
     </div>
     <button class="modal-ver-info" onclick="toggleInfo('pro')">Ver información</button>
     <div class="modal-content-text" id="info-pro">
