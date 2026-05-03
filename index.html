@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Planes</title>
+<title>Planes TUWEB</title>
+<link rel="icon" type="image/png" href="logoweb.png">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -94,6 +95,14 @@
     font-weight: 500;
   }
 
+  /* ── IMAGEN PORTADA TRES ── */
+  .portada-tercera {
+    display: block;
+    margin: 40px auto;
+    max-width: 100%;
+    height: auto;
+  }
+
   /* ── SECCIÓN PLANES ── */
   .planes-section {
     position: relative;
@@ -104,10 +113,10 @@
   }
   .planes-grid {
     display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: stretch;
-    gap: 16px;
+    gap: 24px;
+    flex-wrap: nowrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     padding-bottom: 8px;
@@ -115,27 +124,26 @@
   }
   .planes-grid::-webkit-scrollbar { display: none; }
 
-  @media (max-width: 700px) {
+  @media (max-width: 768px) {
+    .planes-grid { gap: 12px; padding: 10px; }
     .main-title h2 { font-size: .85rem; white-space: normal; }
-    .planes-grid { gap: 10px; }
   }
 
   .plan-card {
+    width: 320px;
+    flex: 0 0 320px;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
+    justify-content: space-between;
     gap: 10px;
-    flex: 1 1 0;
-    min-width: 90px;
-    max-width: 340px;
   }
 
-  /* Wrapper que fuerza igual alto en todas las imágenes */
+  /* Wrapper de imagen con altura fija uniforme */
   .plan-img-box {
     width: 100%;
-    aspect-ratio: 3 / 4;
+    height: 460px;
     overflow: hidden;
-    border-radius: 10px;
+    border-radius: 12px;
     cursor: pointer;
     box-shadow: 0 6px 30px rgba(0,0,0,.5);
     transition: transform .25s ease, box-shadow .25s ease;
@@ -150,20 +158,21 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    border-radius: 10px;
+    border-radius: 12px;
   }
 
   .btn-plan {
     width: 100%;
+    height: 48px;
+    padding: 0 16px;
     background: #fff;
     color: #111;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: clamp(.65rem, 1.4vw, .85rem);
+    font-size: clamp(12px, 2vw, 14px);
     font-weight: 700;
     letter-spacing: .03em;
     border: none;
     border-radius: 8px;
-    padding: 12px 6px;
     cursor: pointer;
     transition: background .2s, color .2s, transform .15s;
     box-shadow: 0 4px 16px rgba(0,0,0,.35);
@@ -171,7 +180,6 @@
     text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
-    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -183,19 +191,9 @@
     transform: translateY(-2px);
   }
 
-  /* ── IMAGEN BAJO PLANES ── */
-  .portadatres-wrap {
-    position: relative;
-    z-index: 1;
-    text-align: center;
-    padding: 48px 20px 52px;
-  }
-  .portadatres-wrap img {
-    max-width: min(720px, 92vw);
-    width: 100%;
-    height: auto;
-    display: inline-block;
-    border-radius: 6px;
+  /* ── LOGOS REDONDOS ── */
+  .logo-web {
+    border-radius: 50%;
   }
 
   /* ── FOOTER ── */
@@ -455,15 +453,15 @@
 </div>
 
 <!-- ── IMAGEN BAJO PLANES ── -->
-<div class="portadatres-wrap">
-  <img src="portadatres.png" alt="Cerrá tareas, abrí oportunidades">
+<div style="position:relative;z-index:1">
+  <img src="portadatres.png" alt="automatizacion negocio" class="portada-tercera">
 </div>
 
 <!-- ── FOOTER ── -->
 <footer>
   <div class="footer-inner">
     <a class="btn-contacto" href="https://wa.me/5492395407700" target="_blank" rel="noopener">Contacto</a>
-    <img class="footer-logo" src="logoweb.png" alt="Logo">
+    <img class="footer-logo logo-web" src="logoweb.png" alt="Logo">
     <p class="footer-tagline">Desaste de esas tareas importantes que se pueden solucionar</p>
   </div>
 </footer>
