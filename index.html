@@ -62,19 +62,16 @@
     text-shadow: 0 2px 12px rgba(0,0,0,.7);
   }
 
-  /* ── IMÁGENES PRINCIPALES ── */
+  /* ── IMÁGENES PRINCIPALES (full width) ── */
   .img-center {
     position: relative;
     z-index: 1;
-    text-align: center;
-    padding: 10px 20px;
+    line-height: 0;
   }
   .img-center img {
-    max-width: min(680px, 92vw);
     width: 100%;
     height: auto;
-    border-radius: 6px;
-    display: inline-block;
+    display: block;
   }
 
   .spacer { height: 48px; position: relative; z-index: 1; }
@@ -111,7 +108,7 @@
   }
   .planes-grid {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: flex-start;
     gap: 24px;
     flex-wrap: nowrap;
@@ -120,11 +117,17 @@
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
+    padding: 0 16px 12px;
   }
   .planes-grid::-webkit-scrollbar { display: none; }
 
+  /* Centrar en desktop donde los 3 planes caben sin scroll */
+  @media (min-width: 1100px) {
+    .planes-grid { justify-content: center; }
+  }
+
   @media (max-width: 768px) {
-    .planes-grid { padding: 10px; gap: 14px; }
+    .planes-grid { gap: 14px; padding: 0 16px 12px; }
     .main-title h2 { font-size: .85rem; white-space: normal; }
     .plan-card { min-width: 260px; }
   }
@@ -411,7 +414,7 @@
 
 <!-- ── SECCIÓN PLANES ── -->
 <div class="planes-section">
-  <div class="planes-grid">
+  <div class="planes-grid" id="planesGrid">
 
     <!-- Plan Básico -->
     <div class="plan-card">
@@ -420,7 +423,7 @@
     </div>
 
     <!-- Plan Estándar -->
-    <div class="plan-card">
+    <div class="plan-card" id="planEstandar">
       <img src="infoestandar.png" alt="Plan Estándar" onclick="openModal('estandar')" title="Ver Plan Estándar">
       <button class="btn-plan" onclick="openModal('estandar')">Ver info de Plan Estándar</button>
     </div>
@@ -631,6 +634,16 @@ y empezar a trabajar con más claridad, menos desgaste y mejores resultados.
 
 
 <script>
+  // Centrar scroll en Plan Estándar al cargar
+  window.addEventListener('load', function () {
+    var grid = document.getElementById('planesGrid');
+    var card = document.getElementById('planEstandar');
+    if (grid && card) {
+      var gridCenter = grid.offsetWidth / 2;
+      var cardCenter = card.offsetLeft + card.offsetWidth / 2;
+      grid.scrollLeft = cardCenter - gridCenter;
+    }
+  });
   function openModal(id) {
     const overlay = document.getElementById('modal-' + id);
     overlay.style.display = 'flex';
