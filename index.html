@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planes</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-image: url('fondoweb.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+    color: #fff;
+  }
+
+  /* ── OVERLAY base para legibilidad ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ── BANNER SUPERIOR ── */
+  .banner {
+    position: relative;
+    z-index: 1;
+    background: #fff;
+    padding: 22px 0 18px;
+    text-align: center;
+  }
+  .banner h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 900;
+    letter-spacing: .18em;
+    color: #111;
+  }
+
+  /* ── TÍTULO PRINCIPAL ── */
+  .main-title {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 36px 20px 28px;
+  }
+  .main-title h2 {
+    font-size: clamp(1rem, 3.2vw, 1.75rem);
+    font-weight: 700;
+    letter-spacing: .06em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 2px 12px rgba(0,0,0,.7);
+  }
+
+  /* ── IMÁGENES PRINCIPALES ── */
+  .img-center {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 10px 20px;
+  }
+  .img-center img {
+    max-width: min(680px, 92vw);
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    display: inline-block;
+  }
+
+  .spacer { height: 48px; position: relative; z-index: 1; }
+
+  /* ── TEXTO BAJO portadados ── */
+  .sub-text {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 22px 24px 30px;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .sub-text p {
+    font-size: clamp(.95rem, 2.2vw, 1.1rem);
+    line-height: 1.6;
+    text-shadow: 0 1px 8px rgba(0,0,0,.8);
+    font-weight: 500;
+  }
+
+  /* ── SECCIÓN PLANES ── */
+  .planes-section {
+    position: relative;
+    z-index: 1;
+    padding: 10px 24px 0;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .planes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+  @media (max-width: 700px) {
+    .planes-grid { grid-template-columns: 1fr; }
+    .main-title h2 { font-size: .85rem; white-space: normal; }
+  }
+
+  .plan-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  .plan-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform .25s ease, box-shadow .25s ease;
+    box-shadow: 0 6px 30px rgba(0,0,0,.5);
+  }
+  .plan-card img:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 14px 40px rgba(0,0,0,.7);
+  }
+  .btn-plan {
+    background: #fff;
+    color: #111;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: .92rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    border: none;
+    border-radius: 50px;
+    padding: 12px 28px;
+    cursor: pointer;
+    transition: background .2s, color .2s, transform .15s;
+    box-shadow: 0 4px 16px rgba(0,0,0,.35);
+    white-space: nowrap;
+  }
+  .btn-plan:hover {
+    background: #111;
+    color: #fff;
+    transform: scale(1.04);
+  }
+
+  /* ── TEXTO BAJO PLANES ── */
+  .bottom-text {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 52px 28px 56px;
+    max-width: 780px;
+    margin: 0 auto;
+  }
+  .bottom-text p {
+    font-size: clamp(.88rem, 1.9vw, 1.02rem);
+    line-height: 1.95;
+    text-shadow: 0 1px 8px rgba(0,0,0,.8);
+    opacity: .92;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    background: #000;
+    text-align: center;
+    padding: 40px 24px 36px;
+  }
+  footer img {
+    max-width: 160px;
+    width: auto;
+    height: auto;
+    display: block;
+    margin: 0 auto 18px;
+  }
+  footer p {
+    font-size: .95rem;
+    color: #ccc;
+    line-height: 1.7;
+    margin-top: 4px;
+  }
+  footer .contacto-label {
+    font-weight: 700;
+    color: #fff;
+    font-size: 1rem;
+    letter-spacing: .04em;
+    margin-bottom: 4px;
+  }
+
+  /* ══════════════════════════════
+     MODAL
+  ══════════════════════════════ */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0,0,0,0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity .3s ease;
+  }
+  .modal-overlay.open {
+    display: flex;
+    opacity: 0;
+    animation: fadeIn .35s ease forwards;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes slideUp {
+    from { transform: translateY(36px) scale(.96); opacity: 0; }
+    to   { transform: translateY(0)     scale(1);   opacity: 1; }
+  }
+
+  .modal-box {
+    background: rgba(15,15,15,.92);
+    border: 1px solid rgba(255,255,255,.12);
+    border-radius: 16px;
+    max-width: 620px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 32px 30px 36px;
+    color: #fff;
+    position: relative;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,.2) transparent;
+    animation: slideUp .35s ease forwards;
+  }
+  .modal-box::-webkit-scrollbar { width: 6px; }
+  .modal-box::-webkit-scrollbar-track { background: transparent; }
+  .modal-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,.2); border-radius: 4px; }
+
+  .modal-close {
+    position: absolute;
+    top: 14px; right: 18px;
+    background: none;
+    border: none;
+    color: rgba(255,255,255,.6);
+    font-size: 1.5rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: color .2s;
+  }
+  .modal-close:hover { color: #fff; }
+
+  .modal-img-wrap {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .modal-img-wrap img {
+    width: 100%;
+    max-width: 480px;
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.6);
+    cursor: pointer;
+    transition: transform .3s ease;
+  }
+  .modal-img-wrap img.enlarged {
+    transform: scale(1.06);
+  }
+
+  .modal-ver-info {
+    display: block;
+    margin: 0 auto 24px;
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.25);
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: .9rem;
+    font-weight: 700;
+    letter-spacing: .05em;
+    padding: 10px 28px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background .2s;
+    text-align: center;
+  }
+  .modal-ver-info:hover { background: rgba(255,255,255,.22); }
+
+  .modal-content-text {
+    display: none;
+    font-size: .93rem;
+    line-height: 1.75;
+    color: rgba(255,255,255,.88);
+    border-top: 1px solid rgba(255,255,255,.1);
+    padding-top: 20px;
+    margin-top: 4px;
+    white-space: pre-line;
+  }
+  .modal-content-text.visible { display: block; }
+
+  .modal-content-text h3 {
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: #fff;
+    margin-bottom: 12px;
+    letter-spacing: .04em;
+  }
+
+  .btn-whatsapp {
+    display: block;
+    margin: 30px auto 0;
+    background: #25D366;
+    color: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    padding: 14px 36px;
+    border-radius: 50px;
+    text-decoration: none;
+    text-align: center;
+    transition: background .2s, transform .15s;
+    box-shadow: 0 4px 20px rgba(37,211,102,.35);
+    max-width: 300px;
+  }
+  .btn-whatsapp:hover {
+    background: #1ebe5d;
+    transform: scale(1.04);
+  }
+</style>
+</head>
+<body>
+
+<!-- ── BANNER ── -->
+<div class="banner">
+  <h1>PLANES</h1>
+</div>
+
+<!-- ── TÍTULO PRINCIPAL ── -->
+<div class="main-title">
+  <h2>TENEMOS UN PLAN QUE SE ADAPTA A VOS</h2>
+</div>
+
+<!-- ── IMAGEN 1 ── -->
+<div class="img-center">
+  <img src="portadauno.png" alt="Portada principal">
+</div>
+
+<div class="spacer"></div>
+
+<!-- ── IMAGEN 2 ── -->
+<div class="img-center">
+  <img src="portadados.png" alt="Segunda portada">
+</div>
+
+<!-- ── TEXTO BAJO portadados ── -->
+<div class="sub-text">
+  <p>Mirá que plan se adapta mejor a vos y pedímelo directo a WhatsApp para comenzar a desarrollar tu marca</p>
+</div>
+
+<!-- ── SECCIÓN PLANES ── -->
+<div class="planes-section">
+  <div class="planes-grid">
+
+    <!-- Plan Básico -->
+    <div class="plan-card">
+      <img src="infouno.png" alt="Plan Básico" onclick="openModal('basico')" title="Ver Plan Básico">
+      <button class="btn-plan" onclick="openModal('basico')">Ver info de Plan Básico</button>
+    </div>
+
+    <!-- Plan Estándar -->
+    <div class="plan-card">
+      <img src="infodos.png" alt="Plan Estándar" onclick="openModal('estandar')" title="Ver Plan Estándar">
+      <button class="btn-plan" onclick="openModal('estandar')">Ver info de Plan Estándar</button>
+    </div>
+
+    <!-- Plan Pro -->
+    <div class="plan-card">
+      <img src="infotres.png" alt="Plan Pro" onclick="openModal('pro')" title="Ver Plan Pro">
+      <button class="btn-plan" onclick="openModal('pro')">Ver info de Plan Pro</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── TEXTO BAJO PLANES ── -->
+<div class="bottom-text">
+  <p>
+    Dejá de perder horas en tareas repetitivas y enfocate en hacer crecer tu negocio.<br>
+    Tu web trabaja por vos, vos te enfocás en lo importante.<br>
+    Menos mensajes que resolver, más tiempo para hacer crecer tu marca.<br>
+    Automatizá lo repetitivo y recuperá tiempo para lo que realmente importa.<br>
+    Mientras la web ordena todo, vos podés enfocarte en avanzar.<br>
+    Liberá tu tiempo sin dejar de vender.<br>
+    Tu negocio funcionando, incluso cuando vos no estás encima.
+  </p>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <img src="logoweb.png" alt="Logo">
+  <p class="contacto-label">Contacto:</p>
+  <p>Desaste de esas tareas importantes que se pueden solucionar</p>
+</footer>
+
+
+<!-- ══════════════════
+     MODALES
+══════════════════ -->
+
+<!-- MODAL BÁSICO -->
+<div class="modal-overlay" id="modal-basico" onclick="handleOverlayClick(event, 'basico')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('basico')" aria-label="Cerrar">&#10005;</button>
+    <div class="modal-img-wrap">
+      <img src="infouno.png" alt="Plan Básico" onclick="toggleEnlarge(this)">
+    </div>
+    <button class="modal-ver-info" onclick="toggleInfo('basico')">Ver información</button>
+    <div class="modal-content-text" id="info-basico">
+<h3>Plan Básico</h3>
+Para empezar a tener presencia que convierta
+
+Imaginá que alguien entra a tu web y en segundos entiende qué hacés, qué ofrecés y cómo comprarte.
+Sin escribirte. Sin vueltas.
+
+Imaginá que ve tus productos bien ordenados, elige lo que quiere, toca un botón…
+y el pedido te llega a WhatsApp armado automáticamente, con todo listo.
+
+Eso es este plan.
+
+Tenés una web diseñada a medida, con la estética de tu negocio.
+No es una plantilla más: es tu identidad bien mostrada.
+
+Carga rápido, funciona perfecto en el celular y no pierde tiempo (ni el tuyo ni el del cliente).
+
+Incluye un catálogo de hasta 20 productos, donde cada persona puede seleccionar lo que necesita y enviarte el pedido sin fricción.
+Todo llega claro, ordenado y listo para responder.
+
+Y además, una calculadora automática que ayuda a tomar decisiones en el momento.
+Menos dudas, más acción.
+
+👉 ¿Qué cambia acá?
+
+Imaginá dejar de responder siempre lo mismo.
+Imaginá que la web ya explica, muestra y ordena por vos.
+
+No es urgencia, es claridad:
+cuando todo está bien presentado, el cliente avanza solo.
+
+Vos dejás de correr atrás de cada mensaje…
+y empezás a enfocarte en lo que realmente mueve tu negocio.
+    </div>
+    <a class="btn-whatsapp" id="wa-basico" href="https://wa.me/5492395407700?text=Hola%20Nicolas!%20Siempre%20Buenasss..%20Quiero%20que%20comencemos%20a%20trabajar%20en%20este%20Plan:%20Plan%20B%C3%A1sico" target="_blank" rel="noopener">Pedir este Plan</a>
+  </div>
+</div>
+
+<!-- MODAL ESTÁNDAR -->
+<div class="modal-overlay" id="modal-estandar" onclick="handleOverlayClick(event, 'estandar')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('estandar')" aria-label="Cerrar">&#10005;</button>
+    <div class="modal-img-wrap">
+      <img src="infodos.png" alt="Plan Estándar" onclick="toggleEnlarge(this)">
+    </div>
+    <button class="modal-ver-info" onclick="toggleInfo('estandar')">Ver información</button>
+    <div class="modal-content-text" id="info-estandar">
+<h3>Plan Estándar</h3>
+Para ordenar tu negocio y mejorar resultados
+
+Imaginá que alguien entra a tu web y no solo entiende lo que hacés…
+sino que siente que está en el lugar correcto.
+
+Imaginá que recorre tus productos, encuentra justo lo que busca, elige sin dudas
+y en segundos te llega el pedido completo a WhatsApp, con todo claro y listo.
+
+Eso ya no es casualidad. Está pensado.
+
+Mantenés todo lo del plan básico, pero lo llevás más lejos:
+
+Tenés una web diseñada a medida, con la estética de tu negocio, cuidada en cada detalle.
+Carga rápido, se ve perfecta en el celular y transmite profesionalismo desde el primer segundo.
+
+Sumás un catálogo de hasta 50 productos, donde el cliente puede elegir y enviarte el pedido automáticamente por WhatsApp, con toda la información organizada.
+Menos preguntas, más decisiones.
+
+Incluye una calculadora automática, que facilita la compra y evita fricciones innecesarias.
+
+Y además, incorporás una mini aplicación dentro de la web:
+puede ser una caja de comentarios tipo red social para generar confianza y comunidad,
+o un sistema de turnos automáticos que ordena tu agenda sin que tengas que intervenir.
+
+Pero lo más importante no es lo que tiene…
+es cómo está pensado.
+
+Cada sección, cada texto y cada paso están diseñados estratégicamente para guiar al cliente:
+entender → confiar → avanzar.
+
+👉 ¿Qué cambia acá?
+
+Imaginá dejar de recibir consultas sin sentido.
+Imaginá que las personas que te escriben ya saben lo que quieren.
+
+No solo mostrás lo que hacés.
+Empezás a atraer gente más decidida.
+
+Filtrás mejor.
+Perdés menos tiempo.
+Y tu negocio sigue funcionando incluso cuando vos no estás.
+    </div>
+    <a class="btn-whatsapp" href="https://wa.me/5492395407700?text=Hola%20Nicolas!%20Siempre%20Buenasss..%20Quiero%20que%20comencemos%20a%20trabajar%20en%20este%20Plan:%20Plan%20Est%C3%A1ndar" target="_blank" rel="noopener">Pedir este Plan</a>
+  </div>
+</div>
+
+<!-- MODAL PRO -->
+<div class="modal-overlay" id="modal-pro" onclick="handleOverlayClick(event, 'pro')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('pro')" aria-label="Cerrar">&#10005;</button>
+    <div class="modal-img-wrap">
+      <img src="infotres.png" alt="Plan Pro" onclick="toggleEnlarge(this)">
+    </div>
+    <button class="modal-ver-info" onclick="toggleInfo('pro')">Ver información</button>
+    <div class="modal-content-text" id="info-pro">
+<h3>Plan Pro</h3>
+Para escalar y sacarle el máximo rendimiento
+
+Imaginá un día normal de trabajo… pero sin el desgaste de siempre.
+
+No respondés "¿precio?" diez veces.
+No explicás cómo comprar una y otra vez.
+No ordenás pedidos que llegan mal o incompletos.
+
+La persona entra, busca con la lupita, encuentra lo que quiere, usa la calculadora si lo necesita…
+y cuando decide, el pedido te llega a WhatsApp listo, con todo claro.
+
+Sin que tengas que intervenir.
+
+Ahora, ¿qué hace posible eso?
+
+Tenés una web diseñada a medida, con la estética real de tu negocio.
+No es algo genérico: está pensada para que todo tenga sentido desde que alguien entra.
+
+La web tiene carga rápida y funciona perfecto en el celular, para no perder oportunidades por algo básico.
+
+Incluye un buscador con lupa, para que la persona encuentre lo que quiere en segundos, sin frustrarse ni abandonar.
+
+Sumás un catálogo de hasta 50 productos, conectado directamente a WhatsApp:
+el cliente elige, agrega y envía…
+y vos recibís el pedido automático con toda la información organizada.
+
+También tenés una calculadora automática, que evita preguntas innecesarias y ayuda a decidir en el momento.
+
+Además, integrás 2 mini aplicaciones dentro de la web:
+
+• una caja de comentarios tipo Red Social, que muestra experiencias reales y genera confianza sin que tengas que convencer
+• un sistema de turnos automáticos, que ordena tu agenda sin mensajes cruzados ni errores
+
+Y algo clave:
+
+Contás con seguimiento de datos, para entender qué está pasando:
+qué miran, qué funciona, qué se mueve más.
+
+No es intuición. Es información.
+
+👉 ¿Qué cambia acá?
+
+Cosas concretas, todos los días:
+
+• Dejás de responder lo mismo constantemente
+• Dejás de ordenar pedidos mal armados
+• Dejás de perder tiempo en consultas que no avanzan
+
+Y empezás a tener:
+
+• Pedidos más claros
+• Clientes más decididos
+• Un negocio más ordenado
+• Más tiempo para enfocarte en lo importante
+
+No es una suma de funciones.
+
+Es sacarte de encima todo lo que hoy te consume tiempo…
+y empezar a trabajar con más claridad, menos desgaste y mejores resultados.
+    </div>
+    <a class="btn-whatsapp" href="https://wa.me/5492395407700?text=Hola%20Nicolas!%20Siempre%20Buenasss..%20Quiero%20que%20comencemos%20a%20trabajar%20en%20este%20Plan:%20Plan%20Pro" target="_blank" rel="noopener">Pedir este Plan</a>
+  </div>
+</div>
+
+
+<script>
+  function openModal(id) {
+    const overlay = document.getElementById('modal-' + id);
+    overlay.style.display = 'flex';
+    requestAnimationFrame(() => overlay.classList.add('open'));
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal(id) {
+    const overlay = document.getElementById('modal-' + id);
+    overlay.classList.remove('open');
+    overlay.style.opacity = '0';
+    setTimeout(() => {
+      overlay.style.display = 'none';
+      overlay.style.opacity = '';
+    }, 300);
+    document.body.style.overflow = '';
+  }
+
+  function handleOverlayClick(e, id) {
+    if (e.target === e.currentTarget) closeModal(id);
+  }
+
+  function toggleInfo(id) {
+    const el = document.getElementById('info-' + id);
+    el.classList.toggle('visible');
+    const btn = el.previousElementSibling;
+    btn.textContent = el.classList.contains('visible') ? 'Ocultar información' : 'Ver información';
+  }
+
+  function toggleEnlarge(img) {
+    img.classList.toggle('enlarged');
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      ['basico','estandar','pro'].forEach(id => {
+        const el = document.getElementById('modal-' + id);
+        if (el && el.classList.contains('open')) closeModal(id);
+      });
+    }
+  });
+</script>
+</body>
+</html>
