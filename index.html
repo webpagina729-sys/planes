@@ -107,34 +107,22 @@
     padding: 10px 16px 0;
   }
   .planes-grid {
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 24px;
-    flex-wrap: nowrap;
-    max-width: 1200px;
+    width: 100%;
     margin: 40px auto;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding: 0 16px 12px;
-  }
-  .planes-grid::-webkit-scrollbar { display: none; }
-
-  /* Centrar en desktop donde los 3 planes caben sin scroll */
-  @media (min-width: 1100px) {
-    .planes-grid { justify-content: center; }
   }
 
   @media (max-width: 768px) {
-    .planes-grid { gap: 14px; padding: 0 16px 12px; }
+    .planes-grid { 
+      grid-template-columns: repeat(1, 1fr);
+      gap: 14px; 
+    }
     .main-title h2 { font-size: .85rem; white-space: normal; }
-    .plan-card { min-width: 260px; }
   }
 
   .plan-card {
-    flex: 1;
-    max-width: 350px;
     display: flex;
     flex-direction: column;
   }
@@ -306,6 +294,32 @@
   }
   .modal-close:hover { background: rgba(255,255,255,.18); color: #fff; }
 
+  .modal-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .nav-btn {
+    background: #fff;
+    color: #111;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .03em;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background .2s, color .2s, transform .15s;
+    box-shadow: 0 4px 16px rgba(0,0,0,.35);
+  }
+  .nav-btn:hover {
+    background: #111;
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
   .modal-img-wrap {
     text-align: center;
     margin-bottom: 22px;
@@ -460,6 +474,10 @@
 <div class="modal-overlay" id="modal-basico" onclick="handleOverlayClick(event, 'basico')">
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal('basico')" aria-label="Cerrar">&#10005;</button>
+    <div class="modal-nav">
+      <button class="nav-btn" onclick="navigateModal('basico', 'prev')">← Anterior</button>
+      <button class="nav-btn" onclick="navigateModal('basico', 'next')">Siguiente →</button>
+    </div>
     <div class="modal-img-wrap">
       <img src="infobasico.png" alt="Plan Básico" onclick="toggleEnlarge(this)">
     </div>
@@ -506,6 +524,10 @@ y empezás a enfocarte en lo que realmente mueve tu negocio.
 <div class="modal-overlay" id="modal-estandar" onclick="handleOverlayClick(event, 'estandar')">
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal('estandar')" aria-label="Cerrar">&#10005;</button>
+    <div class="modal-nav">
+      <button class="nav-btn" onclick="navigateModal('estandar', 'prev')">← Anterior</button>
+      <button class="nav-btn" onclick="navigateModal('estandar', 'next')">Siguiente →</button>
+    </div>
     <div class="modal-img-wrap">
       <img src="infoestandar.png" alt="Plan Estándar" onclick="toggleEnlarge(this)">
     </div>
@@ -562,6 +584,10 @@ Y tu negocio sigue funcionando incluso cuando vos no estás.
 <div class="modal-overlay" id="modal-pro" onclick="handleOverlayClick(event, 'pro')">
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal('pro')" aria-label="Cerrar">&#10005;</button>
+    <div class="modal-nav">
+      <button class="nav-btn" onclick="navigateModal('pro', 'prev')">← Anterior</button>
+      <button class="nav-btn" onclick="navigateModal('pro', 'next')">Siguiente →</button>
+    </div>
     <div class="modal-img-wrap">
       <img src="infopro.png" alt="Plan Pro" onclick="toggleEnlarge(this)">
     </div>
@@ -634,16 +660,6 @@ y empezar a trabajar con más claridad, menos desgaste y mejores resultados.
 
 
 <script>
-  // Centrar scroll en Plan Estándar al cargar
-  window.addEventListener('load', function () {
-    var grid = document.getElementById('planesGrid');
-    var card = document.getElementById('planEstandar');
-    if (grid && card) {
-      var gridCenter = grid.offsetWidth / 2;
-      var cardCenter = card.offsetLeft + card.offsetWidth / 2;
-      grid.scrollLeft = cardCenter - gridCenter;
-    }
-  });
   function openModal(id) {
     const overlay = document.getElementById('modal-' + id);
     overlay.style.display = 'flex';
@@ -675,6 +691,19 @@ y empezar a trabajar con más claridad, menos desgaste y mejores resultados.
 
   function toggleEnlarge(img) {
     img.classList.toggle('enlarged');
+  }
+
+  function navigateModal(current, dir) {
+    const plans = ['basico', 'estandar', 'pro'];
+    const index = plans.indexOf(current);
+    let nextIndex;
+    if (dir === 'next') {
+      nextIndex = (index + 1) % 3;
+    } else {
+      nextIndex = (index - 1 + 3) % 3;
+    }
+    closeModal(current);
+    openModal(plans[nextIndex]);
   }
 
   document.addEventListener('keydown', function(e) {
