@@ -118,11 +118,23 @@
     .planes-grid { 
       display: flex;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
+      padding: 0 10px;
+      box-sizing: border-box;
     }
     .plan-card {
-      width: 33.33%;
+      width: 32%;
       align-items: center;
+    }
+    .plan-card img {
+      border-radius: 8px;
+    }
+    .btn-plan {
+      font-size: 12px;
+      padding: 8px 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .main-title h2 { font-size: .85rem; white-space: normal; }
   }
